@@ -19,24 +19,48 @@ public class Loja {
         this.inscricaoEstadual = inscricaoEstadual;
     }
 
+    public Loja(){
+        this("", new Endereco("", 0, "", "", "", "", ""), "", "", "", ""); 
+    }
+
     public String getNomeLoja() {
         return this.nomeLoja;
+    }
+
+    public void setNomeLoja(String nomeLoja) {
+        this.nomeLoja = nomeLoja;
     }
 
     public String getTelefone() {
         return this.telefone;
     }
 
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     public String getObservacao() {
         return this.observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     public String getCnpj() {
         return this.cnpj;
     }
 
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
     public String getInscricaoEstadual() {
         return this.inscricaoEstadual;
+    }
+
+    public void setInscricaoEstadual(String ie) {
+        this.inscricaoEstadual = ie;
     }
 
     public Endereco getEndereco() {
@@ -47,9 +71,45 @@ public class Loja {
         this.endereco = endereco;
     }
 
-    public String dadosLoja() {
-		// Implemente aqui
-		return null;
+    public static boolean isNullEmpty(String text) {
+		try{
+			int k = text.length();
+		} catch (NullPointerException npe) {
+			return true;
+		}
+		return text.isEmpty();
 	}
 
+    public String dadosLoja() {
+        // Implemente aqui
+        validarCamposObrigatorios();
+
+        String _telefone = isNullEmpty(getTelefone())? "" : "Tel " + getTelefone();
+        _telefone = (!_telefone.isEmpty() && !isNullEmpty(endereco.getCep()))? " " + _telefone : _telefone;
+		
+		String _observacao = isNullEmpty(getObservacao())? "" : getObservacao();				
+		String _cnpj = "CNPJ: " + getCnpj();
+		String _inscricao_estadual = "IE: " + getInscricaoEstadual();
+
+		String output = getNomeLoja() + "\n";
+        output += endereco.dadosEndereco();
+        output += _telefone + "\n";
+		output += _observacao + "\n";
+		output += _cnpj + "\n";
+		output += _inscricao_estadual + "\n";
+
+		return output.replace("\n", System.lineSeparator());
+    }
+    
+    public void validarCamposObrigatorios() {
+
+        if(isNullEmpty(getNomeLoja()))
+			throw new RuntimeException("O campo nome da loja é obrigatório");
+		
+		if(isNullEmpty(getCnpj()))
+			throw new RuntimeException("O campo cnpj da loja é obrigatório");
+	
+		if(isNullEmpty(getInscricaoEstadual()))
+			throw new RuntimeException("O campo inscrição estadual da loja é obrigatório");
+    }
 }
